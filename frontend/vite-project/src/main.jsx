@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -6,7 +6,7 @@ import {
   BrowserRouter,
   createBrowserRouter,
   RouterProvider,
-} from "react-router";
+} from "react-router-dom";
 import CompletedTasks from "./Compoenets/CompletedTask.jsx";
 import InboxTask from "./Compoenets/InboxTask.jsx";
 import TodayTasks from "./Compoenets/TodayTask.jsx";
@@ -14,8 +14,15 @@ import UpcomingTasks from "./Compoenets/UpcomingTask.jsx";
 import Login from "./Compoenets/Login.jsx";
 import Addtask from "./Compoenets/Addtask.jsx";
 const root = document.getElementById("root");
+import { Provider } from "react-redux";
+import { Store } from "./Store/Store.js";
+const id = sessionStorage.getItem("id");
 
 let route = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
   {
     path: "/",
     element: <App />,
@@ -36,16 +43,22 @@ let route = createBrowserRouter([
         path: "/UpcomingTasks",
         element: <UpcomingTasks />,
       },
-            {
+      {
         path: "/addtask",
         element: <Addtask></Addtask>,
       },
     ],
   },
   {
-    path: "/Login",
-    element: <Login />,
+    path: "*",
+    element: <div>404 Page Not Found</div>,
   },
 ]);
 
-createRoot(root).render(<RouterProvider router={route}></RouterProvider>);
+createRoot(root).render(
+  <React.StrictMode>
+    <Provider store={Store}>
+      <RouterProvider router={route} />
+    </Provider>
+  </React.StrictMode>
+);

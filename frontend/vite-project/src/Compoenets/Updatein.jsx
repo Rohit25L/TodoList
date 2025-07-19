@@ -9,9 +9,10 @@ import {
   Plus,
 } from "lucide-react";
 
-export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
+export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
   const [taskName, setTaskName] = useState("");
   const [desc, setDesc] = useState("");
+  const [final, setFinal] = useState([]);
   const descriptionRef = useRef(null);
 
   const [position, setPosition] = useState({
@@ -27,8 +28,13 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
     }
   }, [desc]);
 
+  useEffect(() => {
+    console.log("Current final state:", final);
+    setTasks(final);
+  }, [final]);
+
   const handleAddTask = () => {
-    setTasks({ taskName, desc })
+    setFinal([{ taskName, desc }]);
     setTimeout(() => {
       onCancel(false);
     }, 200);
@@ -71,13 +77,11 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
         </button>
       </div>
 
-
       <div className="pt-4 flex items-center justify-between">
         <div className="flex items-center text-gray-600 text-sm">
           <Inbox size={16} className="mr-1 text-blue-600" />
           <span className="font-medium">Inbox</span>
         </div>
-
 
         <div className="flex items-center space-x-2">
           <button

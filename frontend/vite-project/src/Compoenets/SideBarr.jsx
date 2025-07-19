@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ChevronDown,
   Plus,
@@ -14,9 +14,12 @@ import {
   Menu,
   Settings,
   X,
+  LogOut,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import { Store } from "../Store/Store";
+import { logout } from "../Store/Store";
 
 export default function SideBar({
   activeContent,
@@ -26,9 +29,19 @@ export default function SideBar({
   cloose,
   setTaskOP,
 }) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const username = "Rohit";
+  const dropdownRef = useRef(null);
+  const handleLogout = () => {
+    console.log("Logging out...");
+    logout()
+    setIsDropdownOpen(false);
+  };
+
+  const isLoggedIn = useSelector((State)=>State.isLoggdIn)
+  console.log(isLoggedIn)
   return (
     <>
-
       <button
         onClick={toggleSidebar}
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-md shadow-lg"
@@ -36,7 +49,6 @@ export default function SideBar({
       >
         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
-
 
       {isSidebarOpen && (
         <div
@@ -49,26 +61,48 @@ export default function SideBar({
         className={`fixed inset-y-0 left-0 w-64 bg-white shadow-lg p-4 flex flex-col transition-transform duration-300 ease-in-out z-50 md:translate-x-0
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-
-        <div className="flex items-center justify-between pb-4 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-
-            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-              R
+        <div
+          className="pb-4 border-b border-gray-200 relative"
+          ref={dropdownRef}
+        >
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center w-full justify-between p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                {username.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-gray-800 font-semibold text-base">
+                {username}
+              </span>
             </div>
+            <ChevronDown
+              size={16}
+              className={`text-gray-500 transition-transform ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
 
-            <span className="text-gray-800 font-semibold text-base">
-              Rohit T
-            </span>
 
-            <ChevronDown size={16} className="text-gray-500 cursor-pointer" />
-          </div>
+          {isDropdownOpen && (
+            <div className="absolute left-0 mt-2 w-full bg-white rounded-lg shadow-xl py-2 z-10 border border-gray-200">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors text-sm"
+              >
+                <LogOut size={18} className="mr-3 text-gray-500" />
+                Log out
+              </button>
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 mt-4 space-y-1">
           <button
             className="flex items-center w-full px-3 py-2 text-blue-600 font-medium bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors duration-200"
-            onClick={()=>setTaskOP(true)}
+            onClick={() => setTaskOP(true)}
           >
             <Plus size={20} className="mr-2" />
             Add task
@@ -98,7 +132,6 @@ export default function SideBar({
               </span>
             </div>{" "}
           </Link>
-
 
           <Link to="/">
             <div
@@ -138,8 +171,6 @@ export default function SideBar({
               </span>
             </div>
           </Link>
-
-
         </nav>
 
         <Link to="/completedtask">
