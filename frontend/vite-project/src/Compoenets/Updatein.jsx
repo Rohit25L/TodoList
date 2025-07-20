@@ -9,11 +9,24 @@ import {
   Plus,
 } from "lucide-react";
 
-export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
-  const [taskName, setTaskName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [final, setFinal] = useState([]);
+export default function Updatein({
+  onCancel,
+  setTasks,
+  updateData,
+  UpdateData,
+  setGetData,
+}) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const descriptionRef = useRef(null);
+  const [t, setT] = useState(false);
+
+  useEffect(() => {
+    if (updateData) {
+      setTitle(updateData.title);
+      setDescription(updateData.description);
+    }
+  }, []);
 
   const [position, setPosition] = useState({
     x: window.innerWidth / 2 - 200,
@@ -26,19 +39,21 @@ export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
       descriptionRef.current.style.height =
         descriptionRef.current.scrollHeight + "px";
     }
-  }, [desc]);
+  }, [description]);
 
-  useEffect(() => {
-    console.log("Current final state:", final);
-    setTasks(final);
-  }, [final]);
-
-  const handleAddTask = () => {
-    setFinal([{ taskName, desc }]);
+  const handleAddTask = async () => {
     setTimeout(() => {
       onCancel(false);
     }, 200);
+    console.log("rerenders");
+    setT(!t);
   };
+
+  useEffect(() => {
+    if (title.length > 0) {
+      setGetData({ title, description });
+    }
+  }, [t]);
 
   return (
     <div
@@ -54,8 +69,8 @@ export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
           type="text"
           placeholder="Task name"
           className="w-full text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-2 focus:outline-none"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         {/* Description Input */}
         <textarea
@@ -63,8 +78,8 @@ export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
           placeholder="Description"
           className="w-full text-sm text-gray-600 resize-none border-b border-gray-200 pb-2 focus:outline-none"
           rows="2"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         ></textarea>
       </div>
 
@@ -90,16 +105,16 @@ export default function Updatein({ onAddTask, onCancel, setTasks, tasks }) {
           >
             Cancel
           </button>
-          {taskName.trim() == "" ? (
+          {title.trim() == "" ? (
             <button className="px-4 py-2 bg-red-300 text-white text-sm font-medium rounded-md">
-              Add task
+              Update Task
             </button>
           ) : (
             <button
               onClick={handleAddTask}
               className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition-colors"
             >
-              Add task
+              Update Task
             </button>
           )}
         </div>

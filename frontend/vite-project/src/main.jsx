@@ -13,9 +13,8 @@ import TodayTasks from "./Compoenets/TodayTask.jsx";
 import UpcomingTasks from "./Compoenets/UpcomingTask.jsx";
 import Login from "./Compoenets/Login.jsx";
 import Addtask from "./Compoenets/Addtask.jsx";
+import { Toaster } from 'react-hot-toast';
 const root = document.getElementById("root");
-import { Provider } from "react-redux";
-import { Store } from "./Store/Store.js";
 const id = sessionStorage.getItem("id");
 
 let route = createBrowserRouter([
@@ -57,8 +56,6 @@ let route = createBrowserRouter([
 
 createRoot(root).render(
   <React.StrictMode>
-    <Provider store={Store}>
       <RouterProvider router={route} />
-    </Provider>
   </React.StrictMode>
 );

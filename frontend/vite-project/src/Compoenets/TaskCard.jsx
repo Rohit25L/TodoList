@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import { Edit2, Flag, Trash2, MoreHorizontal } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function TaskCard({
+  indexId,
   saveTask,
   id,
   OnDelete,
   setCheckbut,
   setUpdateUi,
+  UpdateData,
 }) {
-  const { taskName, desc } = saveTask;
+  const { title, description } = saveTask;
+  const notify = () => toast("Task is completed");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    const newStatus = event.target.checked;
+    if (newStatus === true) {
+
+      setIsChecked(true);
+      toast.success("Yay! Task completed!");
+    }
+  };
 
   function handelUpdate() {
     setUpdateUi(true);
-    setCheckbut(id);
-
+    UpdateData(indexId, id);
   }
 
   return (
@@ -22,13 +35,16 @@ export default function TaskCard({
         <input
           type="checkbox"
           className="w-4 h-4 mr-3 mt-1 flex-shrink-0 border-2"
+          onChange={handleCheckboxChange}
+          disabled={isChecked}
+          style={{ cursor: isChecked ? "not-allowed" : "pointer" }}
         ></input>
         <div className="flex flex-col min-w-0 flex-grow">
-          <span className={`text-gray-800 font-medium truncate`}>
-            {taskName}
-          </span>
-          {desc && (
-            <span className={`text-gray-600 text-sm truncate`}>{desc}</span>
+          <span className={`text-gray-800 font-medium truncate`}>{title}</span>
+          {description && (
+            <span className={`text-gray-600 text-sm truncate`}>
+              {description}
+            </span>
           )}
         </div>
       </div>

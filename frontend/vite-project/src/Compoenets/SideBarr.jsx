@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Toaster } from "react-hot-toast";
 import {
   ChevronDown,
   Plus,
@@ -17,9 +18,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Store } from "../Store/Store";
-import { logout } from "../Store/Store";
+import axios from "axios";
 
 export default function SideBar({
   activeContent,
@@ -28,20 +27,41 @@ export default function SideBar({
   toggleSidebar,
   cloose,
   setTaskOP,
+  saveTask,
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const username = "Rohit";
+  const [username, setUser] = useState();
   const dropdownRef = useRef(null);
   const handleLogout = () => {
     console.log("Logging out...");
-    logout()
+    sessionStorage.removeItem("id");
+    window.location.reload();
     setIsDropdownOpen(false);
   };
+  const id = sessionStorage.getItem("id");
 
-  const isLoggedIn = useSelector((State)=>State.isLoggdIn)
-  console.log(isLoggedIn)
+  useEffect(() => {
+    async function Nah() {
+      const useN = await axios.get(`http://localhost:4000/api/v1/ogdata/${id}`);
+      setUser(useN.data.username);
+    }
+    Nah();
+  }, []);
+
   return (
     <>
+      <Toaster
+        position="bottom-left"
+        containerStyle={{
+          bottom: 90,
+        }}
+        toastOptions={{
+          style: {
+            background: '#000',
+            color: '#fff',   
+          },
+        }}
+      />
       <button
         onClick={toggleSidebar}
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-md shadow-lg"
@@ -71,10 +91,10 @@ export default function SideBar({
           >
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                {username.charAt(0).toUpperCase()}
+                {!username ? "0" : username.charAt(0).toUpperCase()}
               </div>
               <span className="text-gray-800 font-semibold text-base">
-                {username}
+                {username ? username : "0"}
               </span>
             </div>
             <ChevronDown
@@ -84,8 +104,6 @@ export default function SideBar({
               }`}
             />
           </button>
-
-
           {isDropdownOpen && (
             <div className="absolute left-0 mt-2 w-full bg-white rounded-lg shadow-xl py-2 z-10 border border-gray-200">
               <button
@@ -128,7 +146,7 @@ export default function SideBar({
                 Inbox
               </div>
               <span className="text-gray-500 text-xs font-semibold px-2 py-0.5 bg-gray-200 rounded-full">
-                4
+                {saveTask.length}
               </span>
             </div>{" "}
           </Link>
@@ -147,7 +165,7 @@ export default function SideBar({
                 Today
               </div>
               <span className="text-white text-xs font-semibold px-2 py-0.5 bg-red-500 rounded-full">
-                3
+                {saveTask.length}
               </span>
             </div>
           </Link>
@@ -166,9 +184,6 @@ export default function SideBar({
                 <Clock size={20} className="mr-2 text-purple-600" />
                 Upcoming
               </div>
-              <span className="text-gray-500 text-xs font-semibold px-2 py-0.5 bg-gray-200 rounded-full">
-                3
-              </span>
             </div>
           </Link>
         </nav>

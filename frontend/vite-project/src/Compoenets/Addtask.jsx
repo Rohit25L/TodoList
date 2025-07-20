@@ -9,9 +9,10 @@ import {
   Plus,
 } from "lucide-react";
 
-export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
-  const [taskName, setTaskName] = useState("");
-  const [desc, setDesc] = useState("");
+export default function Addtask({  onCancel, setTasks }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [final,setFinal]=useState([])
   const descriptionRef = useRef(null);
 
   const [position, setPosition] = useState({
@@ -25,10 +26,14 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
       descriptionRef.current.style.height =
         descriptionRef.current.scrollHeight + "px";
     }
-  }, [desc]);
+  }, [description]);
+
+  useEffect(()=>{
+    setTasks(final)
+  },[final])
 
   const handleAddTask = () => {
-    setTasks({ taskName, desc })
+    setFinal([{ title, description }]);
     setTimeout(() => {
       onCancel(false);
     }, 200);
@@ -48,8 +53,8 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
           type="text"
           placeholder="Task name"
           className="w-full text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-2 focus:outline-none"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         {/* Description Input */}
         <textarea
@@ -57,8 +62,8 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
           placeholder="Description"
           className="w-full text-sm text-gray-600 resize-none border-b border-gray-200 pb-2 focus:outline-none"
           rows="2"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         ></textarea>
       </div>
 
@@ -71,13 +76,11 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
         </button>
       </div>
 
-
       <div className="pt-4 flex items-center justify-between">
         <div className="flex items-center text-gray-600 text-sm">
           <Inbox size={16} className="mr-1 text-blue-600" />
           <span className="font-medium">Inbox</span>
         </div>
-
 
         <div className="flex items-center space-x-2">
           <button
@@ -86,7 +89,7 @@ export default function Addtask({ onAddTask, onCancel, setTasks, tasks }) {
           >
             Cancel
           </button>
-          {taskName.trim() == "" ? (
+          {title.trim() == "" ? (
             <button className="px-4 py-2 bg-red-300 text-white text-sm font-medium rounded-md">
               Add task
             </button>

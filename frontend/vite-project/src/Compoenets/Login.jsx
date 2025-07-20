@@ -1,35 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { LogIn, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import axios from "axios";
-import {Navigate, useNavigate} from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../Store/Store";
-
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const history=useNavigate()
+  const history = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("");
+  const [username, setUser] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
-  const dispatch = useDispatch()
-  const id =sessionStorage.getItem("id")
-  if(id){
-    return <Navigate to = "/"/>
+  const id = sessionStorage.getItem("id");
+
+  if (id) {
+    return <Navigate to="/" />;
   }
-
-
-
 
   const but = !signUp ? "login" : "signin";
   const handleLogin = async (e) => {
     e.preventDefault();
     if (but == "signin") {
-      const res = await axios.post(
-        "http://localhost:4000/api/v1/register",
-        { email, user, password}
-      );
+      const res = await axios.post("http://localhost:4000/api/v1/register", {
+        email,
+        username,
+        password,
+      });
       if (res.status == 200) {
         alert("Registered successfully! Please log in.");
         setTimeout(() => {
@@ -39,29 +34,23 @@ export default function Login() {
         alert(res.data);
       }
       console.log(res.data);
-}
-
-
-
-else {
-     try {
-      const res = await axios.post(
-        "http://localhost:4000/api/v1/login",
-        { email, password }
-      );
-      if (res.status == 200) {
-         sessionStorage.setItem("id",res.data.others._id)
-          alert("you have login sucesfully")
-          dispatch(login())
-          return <Navigate to="/home"></Navigate>
-      } else {
-        alert("wrong email and password");
+    } else {
+      try {
+        const res = await axios.post("http://localhost:4000/api/v1/login", {
+          email,
+          password,
+        });
+        if (res.status == 200) {
+          sessionStorage.setItem("id", res.data.others._id);
+          alert("you have login sucesfully");
+          history("/");
+          return <Navigate to="/home"></Navigate>;
+        } else {
+          alert("wrong email and password");
+        }
+      } catch (error) {
+        alert(error);
       }
-
-     } catch (error) {
-      alert(error)
-
-     }
     }
 
     setEmail("");
@@ -106,7 +95,7 @@ else {
                   <input
                     placeholder="Enter your user name ..."
                     className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                    value={user}
+                    value={username}
                     onChange={(e) => setUser(e.target.value)}
                     required
                   />
