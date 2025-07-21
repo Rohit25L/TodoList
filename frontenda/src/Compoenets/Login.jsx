@@ -20,7 +20,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (but == "signin") {
-      const res = await axios.post("http://localhost:4000/api/v1/register", {
+      const res = await axios.post(`http://localhost:4000/api/v1/register`, {
         email,
         username,
         password,
@@ -36,7 +36,7 @@ export default function Login() {
       console.log(res.data);
     } else {
       try {
-        const res = await axios.post("http://localhost:4000/api/v1/login", {
+        const res = await axios.post(`http://localhost:4000/api/v1/login`, {
           email,
           password,
         });

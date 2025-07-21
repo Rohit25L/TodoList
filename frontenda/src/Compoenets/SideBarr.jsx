@@ -42,7 +42,7 @@ export default function SideBar({
 
   useEffect(() => {
     async function Nah() {
-      const useN = await axios.get(`${window.location.origin}/api/v2/ogdata/${id}`);
+      const useN = await axios.get(`http://localhost:4000/api/v1/ogdata/${id}`);
       setUser(useN.data.username);
     }
     Nah();

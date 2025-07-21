@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Edit2, Flag, Trash2, MoreHorizontal } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 export default function TaskCard({
   indexId,
@@ -14,11 +15,30 @@ export default function TaskCard({
   const { title, description } = saveTask;
   const notify = () => toast("Task is completed");
   const [isChecked, setIsChecked] = useState(false);
+  const userid = sessionStorage.getItem("id");
 
-  const handleCheckboxChange = (event) => {
+  async function fetch() {
+    console.log("startted");
+    try {
+      console.log("sending request", { id: id, title: title });
+      const res = await axios.post("http://localhost:4000/api/v3/completed", {
+        id: userid,
+        title: title,
+      });
+      console.log(res);
+      if (res.status == 200) {
+        OnDelete(id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    console.log("done functionn call");
+  }
+
+  const handleCheckboxChange = async (event) => {
     const newStatus = event.target.checked;
     if (newStatus === true) {
-
+      fetch();
       setIsChecked(true);
       toast.success("Yay! Task completed!");
     }

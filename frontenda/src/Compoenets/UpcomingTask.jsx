@@ -24,6 +24,7 @@ import TaskCard from './TaskCard';
     return weekDates;
   };
 
+
   const weekDates = getWeekDates();
 
   // Filter saveTask that are pending and have a future or today's date

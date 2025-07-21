@@ -31,7 +31,7 @@ export default function App() {
   const desttaask = tasks[0];
 
   const addtotask = async () => {
-    const res = await axios.post("http://localhost:4000/api/v2/addTask", {
+    const res = await axios.post(`http://localhost:4000/api/v2/addTask`, {
       ...desttaask,
       id: id,
     });
