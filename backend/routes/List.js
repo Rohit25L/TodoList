@@ -74,4 +74,21 @@ router.get("/geTask/:id", async (req, res) => {
   }
 });
 
+router.post("/Search/:key", async (req, res) => {
+  const { userid } = req.body;
+  console.log(req.params.key)
+  res.send(req.params.key)
+
+
+  const list = await List.find({ user: req.params.id })
+
+  // if (list.length != 0) {
+  //   res.status(200).json({ list });
+  // } else {
+  //   res.status(200).json({ message: "no task is created" });
+  // }
+});
+
+
+
 module.exports = router;

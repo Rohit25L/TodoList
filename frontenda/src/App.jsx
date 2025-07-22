@@ -4,7 +4,6 @@ import Addtask from "./Compoenets/Addtask";
 
 import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { Toaster } from 'react-hot-toast';
 
 import axios from "axios";
 
