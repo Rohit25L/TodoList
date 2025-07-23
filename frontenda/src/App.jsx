@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 import axios from "axios";
+import SearchBar from "./Compoenets/SearchBar";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
@@ -16,6 +17,7 @@ export default function App() {
   const [getData, setGetData] = useState();
   const [userName ,setuserName] =useState();
 
+  const [searchWin, setSearchWin] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [saveTask, setSaveTask] = useState([]);
   const [updateDa, setUpdateDa] = useState();
@@ -128,6 +130,7 @@ export default function App() {
         cloose={setTaskOP}
         setTaskOP={setTaskOP}
         saveTask={saveTask}
+        setSearchWin={setSearchWin}
       />
       <main
         className={`flex-1 p-8 transition-all duration-300 ease-in-out ${
@@ -146,6 +149,7 @@ export default function App() {
             setGetData,
           }}
         />
+        { searchWin&&<SearchBar/>}
         {taskOP && <Addtask onCancel={setTaskOP} setTasks={setTasks} />}
       </main>
     </div>

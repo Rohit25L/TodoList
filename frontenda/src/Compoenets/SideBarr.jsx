@@ -28,6 +28,7 @@ export default function SideBar({
   cloose,
   setTaskOP,
   saveTask,
+  setSearchWin
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [username, setUser] = useState();
@@ -126,10 +127,10 @@ export default function SideBar({
             Add task
           </button>
 
-          <div className="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors duration-200">
+          <button onClick={()=>setSearchWin(true)} className="w-full"><div className="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors duration-200">
             <Search size={20} className="mr-2 text-gray-500" />
             Search
-          </div>
+          </div></button>
 
           <Link to="/Inboxtask">
             {" "}

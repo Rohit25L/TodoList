@@ -74,19 +74,24 @@ router.get("/geTask/:id", async (req, res) => {
   }
 });
 
-router.post("/Search/:key", async (req, res) => {
-  const { userid } = req.body;
-  console.log(req.params.key)
-  res.send(req.params.key)
+router.get('/:id/search', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title } = req.query;
+    const query = { user: id };
 
+    if (title) {
+      query.title = {
+        $regex: title,
+        $options: 'i'
+      };
+    }
+    const lists = await List.find(query);
+    res.json(lists);
 
-  const list = await List.find({ user: req.params.id })
-
-  // if (list.length != 0) {
-  //   res.status(200).json({ list });
-  // } else {
-  //   res.status(200).json({ message: "no task is created" });
-  // }
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 
