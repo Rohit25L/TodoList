@@ -149,7 +149,7 @@ export default function App() {
             setGetData,
           }}
         />
-        { searchWin&&<SearchBar/>}
+        { searchWin && !taskOP && <SearchBar setSearchWin={setSearchWin}/>}
         {taskOP && <Addtask onCancel={setTaskOP} setTasks={setTasks} />}
       </main>
     </div>

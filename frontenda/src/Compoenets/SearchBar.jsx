@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { X } from 'lucide-react';
 
-const SearchBar = () => {
+const SearchBar = ({setSearchWin}) => {
   const [inputVal, setInputVal] = useState("");
   const [searchVal, setSearchVal] = useState();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const id = sessionStorage.getItem("id");
-  console.log("input");
+
   useEffect(() => {
     const fun = async () => {
       try {
@@ -22,7 +22,7 @@ const SearchBar = () => {
         console.log(error);
       }
     };
-    if(searchVal>0){
+    if(inputVal.length>0){
     fun();}
   }, [inputVal]);
 
@@ -36,12 +36,12 @@ const SearchBar = () => {
     >
       <input
         type="text"
-        className="shadow-md bg-white rounded-lg h-20 w-150"
+        className="shadow-md bg-white rounded-lg h-15 w-150"
         onChange={(e) => setInputVal(e.target.value)}
         value={inputVal}
-      /> <button className="absolute right-3 top-4.5"><X size={40}/></button>
-      {isInputFocused &&  (
-        <div className="shadow-sm p-4 bg-white rounded-lg h-fit">
+      /> <button className="absolute right-3 top-3" onClick={()=>setSearchWin(false)}><X size={40}/></button>
+      {isInputFocused && searchVal && (
+        <div className="shadow-sm p-4 bg-white rounded-lg h-fit max-h-62 overflow-hidden">
           <h3 className="text-xs font-semibold uppercase text-gray-500 mb-2">
             Tasks
           </h3>
