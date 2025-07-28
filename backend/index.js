@@ -1,17 +1,24 @@
-// let queue =[];
+//
 
-// queue.push(10)
-// queue.push(11)
-// queue.push(12)
-// console.log(queue)
-// queue.shift()
+var evalRPN = function(t) {
+    let s=[]
+    for(let i=0;i<t.length;i++){
+        if(t[i]=="+"||t[i]=="-"||t[i]=="*"||t[i]=="/"){
+            let a=s.pop()
+            let b=s.pop()
+            console.log(a,b)
+            let c=eval(`${b} ${t[i]} ${a}`)
+            console.log(c)
+            s.push(Math.trunc(c))
+        }else{
+            s.push(t[i])
+            console.log(s)
+        }
 
-// console.log(queue)
-let a =[2,3]
-let map =new Map()
+    }
+    return Number(s.pop())
 
-map.set(a,5)
 
-if(map.has([2,3])){
-console.log(map.get(a))
-}
+};
+let tokens = ["2","1","+","3","*"]
+console.log(evalRPN(tokens))
